@@ -1,0 +1,45 @@
+COMANDOS PARA ALTERAR SENHA DE BANCO DE DADOS
+
+
+
+1-PARADA -> net stop postgresql-x64-14
+
+
+
+2-LOCAL DO ARQUIVO - para pegar o local do arquivo postgresql -> 
+Get-Service | Where-Object { $_.Name -like "*postgresql*" }
+***ESSE COMANDO PEGA O NOME DO POSTGRESQL QUE VAI SE PASSADO NA LINHA 6 STARTAR***
+
+
+
+3-ABRA AQUI COM O BLOCO DE NOTAS -> pg_hba.conf
+
+
+
+4-- substitui na parte onde vai ter algum socket por trust como esta no exemplo
+**ATENÇÃO NÃO É PARA SUBSTITUIR ONDE TEM REPLICATION**
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            trust
+# IPv6 local connections:
+host    all             all             ::1/128                 trust
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     scram-sha-256
+host    replication     all             127.0.0.1/32            scram-sha-256
+host    replication     all             ::1/128                 scram-sha-256
+
+
+
+5--ALTERAR SENHA ->  
+**COMANDO*** 
+ ALTER USER postgres WITH PASSWORD 'nova_senha';
+
+
+
+6 -- STARTAR ->
+ATENÇÃO VAI SER net start + o nome do seu postgresql
+**COMANDO**
+ net start postgresql-x64-14 (foi o nome do meu postgresql)
+agora da um -> \q
